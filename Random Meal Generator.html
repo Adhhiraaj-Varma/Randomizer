@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Meal Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #ff6347;
+            font-size: 3em;
+        }
+        .meal-box {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 300px;
+        }
+        .meal-box h2 {
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        .meal-box p {
+            font-size: 1.5em;
+            margin: 10px 0;
+        }
+        select, button, input[type="checkbox"] {
+            background-color: #ff6347;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover, select:hover, input[type="checkbox"]:hover {
+            background-color: #ff4500;
+        }
+        .randomize-all {
+            margin-top: 30px;
+            padding: 15px 30px;
+            font-size: 1.2em;
+        }
+        .filter-group {
+            margin: 20px 0;
+        }
+        .filter-group label {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>What to Eat?</h1>
+
+    <div>
+        <label for="cuisine">Choose a Cuisine:</label>
+        <select id="cuisine" onchange="randomizeMeal('all')">
+            <option value="Surprise">Surprise!</option>
+            <option value="american">American</option>
+            <option value="italian">Italian</option>
+            <option value="asian">Asian</option>
+            <option value="mexican">Mexican</option>
+            <option value="mediterranean">Mediterranean</option>
+            <option value="indian">Indian</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="country">Choose Your Country:</label>
+        <select id="country" onchange="randomizeFastFood()">
+            <option value="in">India</option>
+            <option value="us">United States</option>
+            <option value="ca">Canada</option>
+            <option value="jp">Japan</option>
+            <option value="uk">United Kingdom</option>
+            <option value="au">Australia</option>
+            <option value="fr">France</option>
+            <option value="es">Spain</option>
+            <option value="br">Brazil</option>
+            <option value="cn">China</option>
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <label><input type="checkbox" id="vegFilter"> Veg</label>
+        <label><input type="checkbox" id="nonVegFilter"> Non-Veg</label>
+        <label><input type="checkbox" id="veganFilter"> Vegan</label>
+    </div>
+
+    <div class="meal-box">
+        <h2>Breakfast</h2>
+        <p id="breakfast">Click the button to randomize!</p>
+        <button onclick="randomizeMeal('breakfast')">Randomize Breakfast</button>
+    </div>
+
+    <div class="meal-box">
+        <h2>Lunch</h2>
+        <p id="lunch">Click the button to randomize!</p>
+        <button onclick="randomizeMeal('lunch')">Randomize Lunch</button>
+    </div>
+
+    <div class="meal-box">
+        <h2>Dinner</h2>
+        <p id="dinner">Click the button to randomize!</p>
+        <button onclick="randomizeMeal('dinner')">Randomize Dinner</button>
+    </div>
+
+    <div class="meal-box">
+        <h2>Beverage</h2>
+        <p id="beverage">Click the button to randomize!</p>
+        <button onclick="randomizeMeal('beverage')">Randomize Beverage</button>
+    </div>
+
+    <div class="meal-box">
+        <h2>Dessert</h2>
+        <p id="dessert">Click the button to randomize!</p>
+        <button onclick="randomizeMeal('dessert')">Randomize Dessert</button>
+    </div>
+
+    <div class="meal-box">
+        <h2>Fast Food Restaurant</h2>
+        <p id="fastFood">Choose your country to randomize!</p>
+        <button onclick="randomizeFastFood()">Randomize Fast Food</button>
+    </div>
+
+    <button class="randomize-all" onclick="randomizeAllMeals()">Randomize All</button>
+
+    <script>
+        const meals = {
+            Surprise: {
+                breakfast: {
+                    veg: ["Pancakes", "Oatmeal", "Smoothie", "Toast with Avocado", "Granola with Yogurt"],
+                    nonVeg: ["Scrambled Eggs", "Bacon and Eggs"],
+                    vegan: ["Oatmeal", "Smoothie", "Fruit Salad", "Toast with Avocado"]
+                },
+                lunch: {
+                    veg: ["Grilled Cheese Sandwich", "Veggie Burger", "Pasta Salad", "Vegetable Stir-fry", "Caprese Salad"],
+                    nonVeg: ["Chicken Salad", "Turkey Sandwich", "Sushi", "Grilled Chicken"],
+                    vegan: ["Vegetable Stir-fry", "Falafel Wrap", "Vegan Burger"]
+                },
+                dinner: {
+                    veg: ["Vegetable Curry", "Stuffed Peppers", "Veggie Pizza", "Tacos", "Pasta Primavera"],
+                    nonVeg: ["Steak", "Grilled Fish", "Chicken Alfredo", "Pizza", "Chicken Tikka"],
+                    vegan: ["Vegetable Curry", "Stuffed Peppers", "Vegan Tacos", "Pasta Primavera"]
+                },
+                beverage: {
+                    veg: ["Coffee", "Orange Juice", "Smoothie", "Tea", "Lemonade"],
+                    nonVeg: ["Coffee", "Orange Juice", "Smoothie", "Tea", "Lemonade"],
+                    vegan: ["Coffee", "Orange Juice", "Smoothie", "Tea", "Lemonade"]
+                },
+                dessert: {
+                    veg: ["Ice Cream", "Cake", "Fruit Salad", "Yogurt", "Cookies"],
+                    nonVeg: ["Ice Cream", "Cake", "Brownie", "Fruit Salad", "Yogurt", "Cheesecake"],
+                    vegan: ["Fruit Salad", "Vegan Brownies"]
+                }
+            },
+            american: {
+                breakfast: {
+                    veg: ["Bagel with Cream Cheese", "Pancakes with Maple Syrup", "Granola"],
+                    nonVeg: ["Bacon and Eggs", "Sausage and Biscuits"],
+                    vegan: ["Bagel with Peanut Butter", "Pancakes with Maple Syrup"]
+                },
+                lunch: {
+                    veg: ["Grilled Cheese Sandwich", "BBQ Veggie Burger", "Pasta Salad"],
+                    nonVeg: ["Burger with Fries", "Grilled Chicken Sandwich", "BBQ Ribs"],
+                    vegan: ["Grilled Veggie Wrap", "Salad with Vinaigrette"]
+                },
+                dinner: {
+                    veg: ["Mac and Cheese", "Veggie Pizza", "Stuffed Peppers"],
+                    nonVeg: ["Steak with Mashed Potatoes", "BBQ Chicken", "Cheeseburger", "Buffalo Wings"],
+                    vegan: ["Stuffed Peppers", "Vegan Burger"]
+                },
+                beverage: {
+                    veg: ["Coca-Cola", "Iced Tea", "Milkshake", "Root Beer Float"],
+                    nonVeg: ["Coca-Cola", "Iced Tea", "Milkshake"],
+                    vegan: ["Coca-Cola", "Iced Tea", "Lemonade"]
+                },
+                dessert: {
+                    veg: ["Apple Pie", "Brownie", "Cheesecake", "Donuts"],
+                    nonVeg: ["Apple Pie", "Brownie", "Cheesecake"],
+                    vegan: ["Fruit Salad", "Vegan Ice Cream"]
+                }
+            },
+            italian: {
+                breakfast: {
+                    veg: ["Croissant", "Espresso with Biscotti", "Frittata"],
+                    nonVeg: ["Prosciutto with Melon"],
+                    vegan: ["Espresso with Biscotti"]
+                },
+                lunch: {
+                    veg: ["Caprese Salad", "Pasta Primavera", "Bruschetta"],
+                    nonVeg: ["Margherita Pizza", "Spaghetti Bolognese", "Lasagna"],
+                    vegan: ["Caprese Salad", "Pasta with Marinara"]
+                },
+                dinner: {
+                    veg: ["Risotto", "Eggplant Parmesan", "Minestrone Soup"],
+                    nonVeg: ["Chicken Parmesan", "Lamb Ragu", "Seafood Pasta"],
+                    vegan: ["Vegan Pizza", "Minestrone Soup"]
+                },
+                beverage: {
+                    veg: ["Espresso", "Limoncello", "Red Wine", "Prosecco"],
+                    nonVeg: ["Espresso", "Red Wine"],
+                    vegan: ["Espresso", "Limoncello"]
+                },
+                dessert: {
+                    veg: ["Tiramisu", "Cannoli", "Gelato"],
+                    nonVeg: ["Tiramisu", "Cannoli", "Panna Cotta"],
+                    vegan: ["Sorbet", "Fruit Salad"]
+                }
+            },
+            asian: {
+                breakfast: {
+                    veg: ["Congee with Pickled Vegetables", "Tofu Scramble"],
+                    nonVeg: ["Dim Sum", "Rice and Egg", "Prawn Toast"],
+                    vegan: ["Miso Soup with Rice", "Tofu Scramble"]
+                },
+                lunch: {
+                    veg: ["Vegetable Stir-fry", "Sushi with Avocado", "Vegetable Spring Rolls"],
+                    nonVeg: ["Sushi", "Chicken Teriyaki", "Pad Thai", "Peking Duck"],
+                    vegan: ["Vegan Sushi", "Vegetable Stir-fry"]
+                },
+                dinner: {
+                    veg: ["Vegetable Curry", "Tofu Stir-fry", "Veggie Dumplings"],
+                    nonVeg: ["Chicken Satay", "Beef Pho", "Peking Duck"],
+                    vegan: ["Tofu Stir-fry", "Vegetable Curry"]
+                },
+                beverage: {
+                    veg: ["Green Tea", "Bubble Tea", "Soy Milk", "Herbal Tea"],
+                    nonVeg: ["Green Tea", "Bubble Tea"],
+                    vegan: ["Green Tea", "Bubble Tea", "Soy Milk"]
+                },
+                dessert: {
+                    veg: ["Mochi", "Fortune Cookie", "Sweet Sticky Rice"],
+                    nonVeg: ["Mochi", "Sweet Sticky Rice", "Egg Tart"],
+                    vegan: ["Mochi", "Sweet Sticky Rice"]
+                }
+            },
+            mexican: {
+                breakfast: {
+                    veg: ["Churros", "Tostada with Beans", "Mexican Sweet Bread"],
+                    nonVeg: ["Chorizo with Eggs", "Huevos Rancheros"],
+                    vegan: ["Tostada with Beans", "Fruit Salad"]
+                },
+                lunch: {
+                    veg: ["Bean Burrito", "Cheese Quesadilla", "Vegetable Tacos"],
+                    nonVeg: ["Chicken Quesadilla", "Fish Tacos", "Carne Asada"],
+                    vegan: ["Vegan Tacos", "Bean Burrito"]
+                },
+                dinner: {
+                    veg: ["Vegetable Enchiladas", "Chili Relleno", "Tamales"],
+                    nonVeg: ["Chicken Fajitas", "Steak Tacos", "Shrimp Enchiladas"],
+                    vegan: ["Vegan Enchiladas", "Vegan Tacos"]
+                },
+                beverage: {
+                    veg: ["Horchata", "Agua Fresca", "Limeade"],
+                    nonVeg: ["Horchata", "Margarita"],
+                    vegan: ["Horchata", "Agua Fresca"]
+                },
+                dessert: {
+                    veg: ["Churros", "Flan", "Tres Leches Cake"],
+                    nonVeg: ["Flan", "Tres Leches Cake"],
+                    vegan: ["Vegan Churros", "Fruit Salad"]
+                }
+            },
+            mediterranean: {
+                breakfast: {
+                    veg: ["Greek Yogurt with Honey", "Fresh Fruit"],
+                    nonVeg: ["Eggs with Feta"],
+                    vegan: ["Fresh Fruit", "Oatmeal"]
+                },
+                lunch: {
+                    veg: ["Greek Salad", "Falafel", "Hummus with Pita"],
+                    nonVeg: ["Chicken Gyro", "Lamb Kofta"],
+                    vegan: ["Tabbouleh", "Falafel"]
+                },
+                dinner: {
+                    veg: ["Vegetarian Moussaka", "Stuffed Grape Leaves", "Roasted Vegetables"],
+                    nonVeg: ["Grilled Fish with Vegetables", "Chicken Souvlaki"],
+                    vegan: ["Vegetarian Moussaka", "Stuffed Grape Leaves"]
+                },
+                beverage: {
+                    veg: ["Mint Tea", "Pomegranate Juice"],
+                    nonVeg: ["Mint Tea", "Turkish Coffee"],
+                    vegan: ["Mint Tea", "Pomegranate Juice"]
+                },
+                dessert: {
+                    veg: ["Baklava", "Fresh Fruit with Yogurt"],
+                    nonVeg: ["Baklava", "Semolina Cake"],
+                    vegan: ["Fruit Salad", "Vegan Baklava"]
+                }
+            },
+            indian: {
+                breakfast: {
+                    veg: ["Masala Dosa", "Aloo Paratha", "Poha"],
+                    nonVeg: ["Egg Bhurji"],
+                    vegan: ["Masala Dosa", "Upma"]
+                },
+                lunch: {
+                    veg: ["Paneer Butter Masala", "Dal Makhani", "Chole Bhature"],
+                    nonVeg: ["Chicken Biryani", "Mutton Rogan Josh", "Fish Curry"],
+                    vegan: ["Chana Masala", "Aloo Gobi"]
+                },
+                dinner: {
+                    veg: ["Palak Paneer", "Vegetable Pulao", "Baingan Bharta"],
+                    nonVeg: ["Tandoori Chicken", "Lamb Kebabs", "Prawn Curry"],
+                    vegan: ["Dal Tadka", "Vegetable Pulao"]
+                },
+                beverage: {
+                    veg: ["Masala Chai", "Mango Lassi", "Buttermilk"],
+                    nonVeg: ["Masala Chai", "Mango Lassi"],
+                    vegan: ["Masala Chai", "Coconut Water"]
+                },
+                dessert: {
+                    veg: ["Gulab Jamun", "Rasgulla", "Kheer"],
+                    nonVeg: ["Gulab Jamun", "Kheer"],
+                    vegan: ["Coconut Ladoo", "Fruit Salad"]
+                }
+            }
+        };
+
+        const fastFoodRestaurants = {
+            in: ["McDonald's", "KFC", "Subway", "Domino's", "Pizza Hut", "Burger King"],
+            us: ["McDonald's", "Taco Bell", "Chick-fil-A", "Wendy's", "In-N-Out Burger", "Shake Shack"],
+            ca: ["Tim Hortons", "Harvey's", "A&W", "McDonald's", "Boston Pizza"],
+            jp: ["Mos Burger", "Sukiya", "Lotteria", "McDonald's", "KFC", "Yoshinoya"],
+            uk: ["McDonald's", "Greggs", "Subway", "Pret A Manger", "KFC", "Nando's"],
+            au: ["Hungry Jack's", "Grill'd", "Red Rooster", "McDonald's", "KFC"],
+            fr: ["Quick", "McDonald's", "KFC", "Paul", "Brioche Dorée"],
+            es: ["McDonald's", "Telepizza", "100 Montaditos", "Pans & Company", "VIPS"],
+            br: ["Habib's", "McDonald's", "Bob's", "Subway", "Burger King"],
+            cn: ["McDonald's", "KFC", "Dicos", "Pizza Hut", "Kungfu"]
+        };
+
+        function randomizeMeal(type) {
+            const cuisine = document.getElementById("cuisine").value;
+            const vegFilter = document.getElementById("vegFilter").checked;
+            const nonVegFilter = document.getElementById("nonVegFilter").checked;
+            const veganFilter = document.getElementById("veganFilter").checked;
+
+            let mealOptions;
+
+            if (veganFilter) {
+                mealOptions = meals[cuisine][type].vegan;
+            } else if (vegFilter) {
+                mealOptions = meals[cuisine][type].veg;
+            } else if (nonVegFilter) {
+                mealOptions = meals[cuisine][type].nonVeg;
+            } else {
+                const combinedMeals = [...meals[cuisine][type].veg, ...meals[cuisine][type].nonVeg, ...meals[cuisine][type].vegan];
+                mealOptions = [...new Set(combinedMeals)];
+            }
+
+            const randomMeal = mealOptions[Math.floor(Math.random() * mealOptions.length)];
+            document.getElementById(type).innerHTML = randomMeal;
+        }
+
+        function randomizeAllMeals() {
+            randomizeMeal('breakfast');
+            randomizeMeal('lunch');
+            randomizeMeal('dinner');
+            randomizeMeal('beverage');
+            randomizeMeal('dessert');
+        }
+
+        function randomizeFastFood() {
+            const country = document.getElementById("country").value;
+            const restaurants = fastFoodRestaurants[country];
+            const randomRestaurant = restaurants[Math.floor(Math.random() * restaurants.length)];
+            document.getElementById("fastFood").innerHTML = randomRestaurant;
+        }
+    </script>
+
+</body>
+</html>
